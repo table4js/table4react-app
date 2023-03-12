@@ -1,4 +1,4 @@
-import { ArrayDataProvider, Table, Table4 } from 'table4react';
+import { ArrayDataProvider, Table, Table4, registerComponent } from 'table4react';
 import { sampleData } from '../data';
 import 'table4react/table4.css';
 
@@ -24,7 +24,7 @@ var options: any = {
   var model = new Table(options);
   model.dataProvider = new ArrayDataProvider(sampleData);
   
-  export default function List() {
+  export function List() {
     return (
       <div className="App">
         <section style={{display: "block", width: "100%", height: "calc(100vh - 16px)"}}>
@@ -33,3 +33,5 @@ var options: any = {
       </div>
     );
   }
+
+  registerComponent("abris-list", List);

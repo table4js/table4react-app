@@ -225,11 +225,11 @@ form[action$="destroy"] button {
   padding-top: 1rem;
 }
 
-#sidebar nav a span {
+#sidebar nav span span {
   float: right;
   color: #eeb004;
 }
-#sidebar nav a.active span {
+#sidebar nav span.active span {
   color: inherit;
 }
 
@@ -250,7 +250,7 @@ i {
   margin: 0.25rem 0;
 }
 
-#sidebar nav a {
+#sidebar nav span {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -262,28 +262,29 @@ i {
   color: inherit;
   text-decoration: none;
   gap: 1rem;
+
+  cursor: pointer;
 }
 
-#sidebar nav a:hover {
+#sidebar nav span:hover {
   background: #e3e3e3;
 }
 
-#sidebar nav a.active {
+#sidebar nav span.active {
   background: hsl(224, 98%, 58%);
   color: white;
 }
 
-#sidebar nav a.pending {
+#sidebar nav span.pending {
   color: hsl(224, 98%, 58%);
 }
 
-#detail {
+.abris-view-container {
   flex: 1;
-  padding: 2rem 4rem;
   width: 100%;
 }
 
-#detail.loading {
+.abris-view-container.loading {
   opacity: 0.25;
   transition: opacity 200ms;
   transition-delay: 200ms;

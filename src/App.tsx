@@ -1,20 +1,34 @@
 import React, { useEffect } from 'react'
-import { load } from './redux/metadata'
 import { useReduxDispatch, useReduxSelector } from './redux'
 import { AbrisComponent } from 'table4react';
+import { load } from './redux/metadata'
+import { navigateTo } from './redux/application'
 import ErrorPage from "./error-page";
 
 import './App.css';
 
 function App() {
   const menuItems: Array<any> = useReduxSelector(state => state.metadata.menuItems)
+  const path: string = useReduxSelector(state => state.application.path)
+  const [viewId, entity] = path.split("/")
   const dispatch = useReduxDispatch()
 
   const loadStatus = useReduxSelector(state => state.metadata.status)
 
   useEffect(() => {
-    if (loadStatus === 'idle') {
-      dispatch(load())
+    let ignore = false;
+    async function loadMetadata() {
+      if (loadStatus === 'idle') {
+        const payload = await load()
+        if (!ignore) {
+          dispatch(payload)
+        }
+      }
+    }
+    loadMetadata()
+
+    return () => {
+      ignore = true
     }
   }, [loadStatus, dispatch])   
 
@@ -50,15 +64,16 @@ function App() {
             {
               menuItems.map(menuItem => (
                 <li>
-                  <a href={`/list/` + menuItem.entity}>{menuItem.title}</a>
+                  <span onClick={() => dispatch(navigateTo(`list/` + menuItem.entity))}>{menuItem.title}</span>
                 </li>
               ))
             }
           </ul>
         </nav>
       </div>
-      <div id="detail">
-        <AbrisComponent componentName={'abris-' + 'list'} componentProps={{}}></AbrisComponent>
+      <div className='abris-view-container'>
+        {!!viewId ? <AbrisComponent componentName={'abris-' + viewId} componentProps={{entity}}></AbrisComponent>
+        : <></>}
       </div>
     </>
   );

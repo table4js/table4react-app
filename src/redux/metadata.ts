@@ -1,7 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const initialState: { menuItems: Array<any>, status: string, error: any } = {
+// Define a type for the slice state
+interface IMetadataState {
+  menuItems: Array<any>,
+  status: string,
+  error: any
+}
+
+const initialState: IMetadataState = {
     menuItems: [] as Array<any>,
     status: 'idle',
     error: null

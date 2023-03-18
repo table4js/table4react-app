@@ -1,36 +1,38 @@
-import { ArrayDataProvider, Table, Table4, registerComponent } from 'table4react';
-import { sampleData } from '../data';
-import 'table4react/table4.css';
+import { ArrayDataProvider, Table, Table4, ITableConfig, registerComponent, RemoteDataProvider } from 'table4react'
+import { sampleData } from '../data'
+import 'table4react/table4.css'
+import { useReduxSelector } from '../redux'
+
 import './List.scss'
+import { useMemo } from 'react'
 
-var options: any = {
-    enableEdit: true,
-    columns: [
-        {
-            name: "word",
-            title: "Word"
-        },
-        {
-            name: "num",
-            title: "Number",
-            type: "number"
-        },
-        {
-            name: "text",
-            title: "Text",
+
+export interface IListParams {
+    entity: string,
+    config?: ITableConfig,
+    data?: Array<any>,
+    baseUrl?: string
+}
+
+export function List({ entity, config, data, baseUrl }: IListParams) {
+    const lists = useReduxSelector(state => state.metadata.lists)
+    if (!config) {
+        config = Object.assign({}, lists[entity])
+    }
+    const model = useMemo(() => {
+        const model = new Table(config!);
+        if (!!data) {
+            model.dataProvider = new ArrayDataProvider(sampleData)
+        } else if (!!baseUrl) {
+            model.dataProvider = new RemoteDataProvider(entity, baseUrl)
         }
-    ],
-  };
-  
-  var model = new Table(options);
-  model.dataProvider = new ArrayDataProvider(sampleData);
-  
-  export function List() {
+        return model;
+    }, [entity, config, data, baseUrl]);
     return (
-      <div className="abris-list-view">
-          <Table4 model={model}/>
-      </div>
+        <div className='abris-list-view'>
+            { model ? <Table4 model={model} /> : null }
+        </div>
     );
-  }
+}
 
-  registerComponent("abris-list", List);
+registerComponent('abris-list', List)

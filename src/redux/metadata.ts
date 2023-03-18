@@ -3,13 +3,17 @@ import axios from 'axios';
 
 // Define a type for the slice state
 interface IMetadataState {
-  menuItems: Array<any>,
+  rootMenu: Array<any>,
+  lists: { [entity: string]: any },
+  defaultEndpoint: string,
   status: string,
   error: any
 }
 
 const initialState: IMetadataState = {
-    menuItems: [] as Array<any>,
+    rootMenu: [],
+    lists: {},
+    defaultEndpoint: "",
     status: 'idle',
     error: null
 }
@@ -41,18 +45,20 @@ const metadataSlice = createSlice({
           .addCase(load.fulfilled, (state, action) => {
             state.status = 'succeeded'
             // Add any fetched surveys to the array
-            state.menuItems = state.menuItems.concat(action.payload)
+            Object.keys(action.payload).forEach(key => {
+              state[key as keyof IMetadataState] = action.payload[key]
+            })
           })
           .addCase(load.rejected, (state, action) => {
             state.status = 'failed'
             state.error = action.error.message
-          });
+          })
       }
 });
 
 export const load = createAsyncThunk('metadata/load', async () => {
     const response = await axios.get('/api/metadata');
-    return response.data.rootMenu;
+    return response.data;
 });
 
 export default metadataSlice.reducer;

@@ -1,0 +1,18 @@
+{
+    "enableEdit": true,
+    "columns": [
+        {
+            "name": "word",
+            "title": "Word"
+        },
+        {
+            "name": "num",
+            "title": "Number",
+            "type": "number"
+        },
+        {
+            "name": "text",
+            "title": "Text"
+        }
+    ]
+}

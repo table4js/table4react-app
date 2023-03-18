@@ -1,0 +1,14 @@
+[
+    {
+        "id": "item1",
+        "view": "list",
+        "entity": "declaration",
+        "title": "Declaration on the Human Rights"
+    },
+    {
+        "id": "item2",
+        "view": "list",
+        "entity": "generated",
+        "title": "Mock generated data"
+    }
+]

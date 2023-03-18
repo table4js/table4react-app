@@ -271,12 +271,12 @@ i {
 }
 
 #sidebar nav span.active {
-  background: hsl(224, 98%, 58%);
+  background: var(--abc-primary-0, #263769);;
   color: white;
 }
 
 #sidebar nav span.pending {
-  color: hsl(224, 98%, 58%);
+  color: var(--abc-primary-0, #263769);;
 }
 
 .abris-view-container {

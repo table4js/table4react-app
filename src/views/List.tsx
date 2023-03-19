@@ -1,10 +1,9 @@
+import { useMemo } from 'react'
 import { ArrayDataProvider, Table, Table4, ITableConfig, registerComponent, RemoteDataProvider } from 'table4react'
-import { sampleData } from '../data'
-import 'table4react/table4.css'
 import { useReduxSelector } from '../redux'
 
+import 'table4react/table4.css'
 import './List.scss'
-import { useMemo } from 'react'
 
 
 export interface IListParams {
@@ -22,7 +21,7 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
     const model = useMemo(() => {
         const model = new Table(config!);
         if (!!data) {
-            model.dataProvider = new ArrayDataProvider(sampleData)
+            model.dataProvider = new ArrayDataProvider(data)
         } else if (!!baseUrl) {
             model.dataProvider = new RemoteDataProvider(entity, baseUrl)
         }

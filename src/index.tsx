@@ -9,10 +9,10 @@ import './index.css';
 export * from './views';
 
 function prepare() {
-  if (process.env.NODE_ENV === 'development') {
-    const { worker } = require('./mocks/browser');
-    return worker.start();
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //  const { worker } = require('./mocks/browser');
+  //  return worker.start();
+  // }
   return Promise.resolve();
 }
 

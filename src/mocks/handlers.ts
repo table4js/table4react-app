@@ -3,7 +3,7 @@ import { getDataProvider } from './data'
 import { metadata } from './metadata'
 
 export const handlers = [
-    rest.get(metadata.defaultEndpoint + 'metadata', (req, res, ctx) => {
+    rest.post('http://localhost:3030/getMenu', (req, res, ctx) => {
         // const { userId } = req.params
         // return res(
         //   ctx.json({
@@ -16,6 +16,7 @@ export const handlers = [
             ctx.json(metadata),
         )
     }),
+
     rest.post(metadata.defaultEndpoint + 'getData', (req, res, ctx) => {
         const { name, limit, offset, order, key, back } = req.body as Record<string, any>
         const dataProvider = getDataProvider(name)

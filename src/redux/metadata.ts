@@ -57,7 +57,15 @@ const metadataSlice = createSlice({
 });
 
 export const load = createAsyncThunk('metadata/load', async () => {
-    const response = await axios.get('/api/metadata');
+  //  const response = await axios.get('/api/metadata');
+    
+    const response = await axios({
+      method: 'post',
+      url: 'http://localhost:3030/getMenu',
+      data: {
+        role: 'guest',
+      }
+    });
     return response.data;
 });
 

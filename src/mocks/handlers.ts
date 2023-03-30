@@ -1,9 +1,10 @@
 import { rest } from 'msw'
 import { getDataProvider } from './data'
 import { metadata } from './metadata'
+import { defaultEndpoint } from '../config'
 
 export const handlers = [
-    rest.post('http://localhost:3030/getMenu', (req, res, ctx) => {
+    rest.post(defaultEndpoint + 'getMenu', (req, res, ctx) => {
         // const { userId } = req.params
         // return res(
         //   ctx.json({

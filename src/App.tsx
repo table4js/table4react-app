@@ -4,11 +4,13 @@ import { AbrisComponent } from 'table4react';
 import { load } from './redux/metadata'
 import { navigateTo } from './redux/application'
 import ErrorPage from "./error-page";
+import { defaultEndpoint } from './config'
+
 
 import './App.css';
 
 function App() {
-  const defaultEndpoint: string = useReduxSelector(state => state.metadata.defaultEndpoint)
+  // const defaultEndpoint: string = useReduxSelector(state => state.metadata.defaultEndpoint)
   const menuItems: Array<any> = useReduxSelector(state => state.metadata.rootMenu)
   const path: string = useReduxSelector(state => state.application.path)
   const [view, entity] = path.split("/")

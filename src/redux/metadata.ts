@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { defaultEndpoint } from '../config'
+
 
 // Define a type for the slice state
 interface IMetadataState {
@@ -61,7 +63,7 @@ export const load = createAsyncThunk('metadata/load', async () => {
     
     const response = await axios({
       method: 'post',
-      url: 'http://localhost:3030/getMenu',
+      url: defaultEndpoint + 'getMenu',
       data: {
         role: 'guest',
       }

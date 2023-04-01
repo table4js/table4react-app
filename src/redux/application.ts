@@ -4,12 +4,16 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
 interface IApplicationState {
-  path: string
+  path: string,
+  viewMode: 'default' | 'edit',
+  editedRow: any
 }
 
 // Define the initial state using that type
 const initialState: IApplicationState = {
   path: '',
+  viewMode: 'default',
+  editedRow: undefined
 }
 
 export const applicationSlice = createSlice({
@@ -20,9 +24,16 @@ export const applicationSlice = createSlice({
     navigateTo: (state, action: PayloadAction<string>) => {
       state.path = action.payload
     },
+    startEditRow: (state, action: PayloadAction) => {
+      state.viewMode = 'edit'
+    },
+    endEditRow: (state, action: PayloadAction) => {
+      state.editedRow = undefined
+      state.viewMode = 'default'
+    }
   },
 })
 
-export const { navigateTo } = applicationSlice.actions
+export const { navigateTo, startEditRow, endEditRow } = applicationSlice.actions
 
 export default applicationSlice.reducer

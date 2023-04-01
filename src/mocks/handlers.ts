@@ -22,7 +22,7 @@ export const handlers = [
         let result: any = { data: [], count: 0 }
         dataProvider.getData(limit, offset, order, key, back, (res: any) => {
             result.data = res
-            result.count = dataProvider.data.length
+            result.count = dataProvider['_data'].length
         })
         return res(
             ctx.json(result)

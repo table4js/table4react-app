@@ -5,16 +5,15 @@ import { defaultEndpoint } from '../config'
 
 export const handlers = [
     rest.post(defaultEndpoint + 'getMenu', (req, res, ctx) => {
-        // const { userId } = req.params
-        // return res(
-        //   ctx.json({
-        //     id: userId,
-        //     firstName: 'John',
-        //     lastName: 'Maverick',
-        //   }),
-        // )
         return res(
             ctx.json(metadata),
+        )
+    }),
+
+    rest.post(defaultEndpoint + 'getEntity', (req, res, ctx) => {
+        const { name } = req.body as Record<string, any>
+        return res(
+            // ctx.json(Object.assign({}, metadata.lists[name])),
         )
     }),
 

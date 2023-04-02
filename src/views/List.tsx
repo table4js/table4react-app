@@ -1,9 +1,10 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 import { ArrayDataProvider, Table, Table4, ITableConfig, registerComponent, RemoteDataProvider } from 'table4react'
-import { useReduxSelector } from '../redux'
+import { useReduxSelector, useReduxDispatch } from '../redux'
 
 import 'table4react/table4.css'
 import './List.scss'
+import { load } from '../redux/view'
 
 
 export interface IListParams {
@@ -15,10 +16,34 @@ export interface IListParams {
 
 export function List({ entity, config, data, baseUrl }: IListParams) {
     const lists = useReduxSelector(state => state.metadata.lists)
+    const dispatch = useReduxDispatch()
+    const loadStatus = useReduxSelector(state => state.view.status)
+    const viewConfig = useReduxSelector(state => state.view.entity)
+
     if (!config) {
-        config = Object.assign({}, lists[entity])
+        config = viewConfig
     }
+  
+  
+    useEffect(() => {
+        let ignore = false;
+        async function loadViewConfig() {
+          if (loadStatus === 'idle') {
+            const payload = await load(entity)
+            if (!ignore) {
+              dispatch(payload)
+            }
+          }
+        }
+        loadViewConfig()
+    
+        return () => {
+          ignore = true
+        }
+      }, [loadStatus, dispatch])   
+    
     const model = useMemo(() => {
+        if (!config) return null;
         const model = new Table(config!);
         if (!!data) {
             model.dataProvider = new ArrayDataProvider(data)

@@ -21,7 +21,7 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
     const viewConfig = useReduxSelector(state => state.view.entity)
 
     if (!config) {
-        config = viewConfig
+        config = Object.assign({}, viewConfig) 
     }
   
   
@@ -43,7 +43,7 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
       }, [loadStatus, dispatch])   
     
     const model = useMemo(() => {
-        if (!config) return null;
+        if (!config || !config.columns) return null;
         const model = new Table(config!);
         if (!!data) {
             model.dataProvider = new ArrayDataProvider(data)

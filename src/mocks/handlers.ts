@@ -3,6 +3,7 @@ import { getDataProvider } from './data'
 import { metadata } from './metadata'
 import { defaultEndpoint } from '../config'
 
+
 export const handlers = [
     rest.post(defaultEndpoint + 'getMenu', (req, res, ctx) => {
         return res(
@@ -11,13 +12,13 @@ export const handlers = [
     }),
 
     rest.post(defaultEndpoint + 'getEntity', (req, res, ctx) => {
-        const { name } = req.body as Record<string, any>
+        const { name } = req.body as Record<string, "declaration"|"generated">
         return res(
-            // ctx.json(Object.assign({}, metadata.lists[name])),
+            ctx.json(metadata.lists[name]),
         )
     }),
 
-    rest.post(metadata.defaultEndpoint + 'getData', (req, res, ctx) => {
+    rest.post(defaultEndpoint + 'getData', (req, res, ctx) => {
         const { name, limit, offset, order, key, back } = req.body as Record<string, any>
         const dataProvider = getDataProvider(name)
         let result: any = { data: [], count: 0 }

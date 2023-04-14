@@ -1,20 +1,21 @@
 import { rest } from 'msw'
 import { getDataProvider } from './data'
-import { metadata } from './metadata'
 import { defaultEndpoint } from '../config'
-
+import rootMenu from '../assets/root-menu.json'
+import declaration from '../assets/list-config/declaration.json'
+import generated from '../assets/list-config/generated.json'
 
 export const handlers = [
     rest.post(defaultEndpoint + 'getMenu', (req, res, ctx) => {
         return res(
-            ctx.json(metadata),
+            ctx.json({rootMenu}),
         )
     }),
 
     rest.post(defaultEndpoint + 'getEntity', (req, res, ctx) => {
-        const { name } = req.body as Record<string, "declaration"|"generated">
+        const { name } = req.body as Record<string, 'declaration' | 'generated'>
         return res(
-            ctx.json(metadata.lists[name]),
+            ctx.json(name === 'declaration' ? declaration : generated),
         )
     }),
 

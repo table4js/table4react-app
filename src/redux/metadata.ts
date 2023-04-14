@@ -6,16 +6,12 @@ import { defaultEndpoint } from '../config'
 // Define a type for the slice state
 interface IMetadataState {
   rootMenu: Array<any>,
-  lists: { [entity: string]: any },
-  defaultEndpoint: string,
   status: string,
   error: any
 }
 
 const initialState: IMetadataState = {
     rootMenu: [],
-    lists: {},
-    defaultEndpoint: "",
     status: 'idle',
     error: null
 }
@@ -46,10 +42,7 @@ const metadataSlice = createSlice({
           })
           .addCase(load.fulfilled, (state, action) => {
             state.status = 'succeeded'
-            // Add any fetched surveys to the array
-            Object.keys(action.payload).forEach(key => {
-              state[key as keyof IMetadataState] = action.payload[key]
-            })
+            state.rootMenu = action.payload.rootMenu
           })
           .addCase(load.rejected, (state, action) => {
             state.status = 'failed'

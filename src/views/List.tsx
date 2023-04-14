@@ -1,13 +1,12 @@
 import { useMemo, useEffect } from 'react'
 import { ArrayDataProvider, Table, Table4, ITableConfig, registerComponent, RemoteDataProvider } from 'table4react'
 import { useReduxDispatch, useReduxSelector } from '../redux'
-import { startEditRow, endEditRow } from '../redux/application'
+import { startEditRow, endEditRow, load } from '../redux/application'
 import { AsideEditorPlugin } from '../components/editor-aside'
 import Detail from './Detail'
 
 import 'table4react/table4.css'
 import './List.scss'
-import { load } from '../redux/view'
 
 export interface IListParams {
     entity: string,
@@ -18,9 +17,8 @@ export interface IListParams {
 
 export function List({ entity, config, data, baseUrl }: IListParams) {
     const dispatch = useReduxDispatch()
-    const lists = useReduxSelector(state => state.metadata.lists)
-    const loadStatus = useReduxSelector(state => state.view.status)
-    const viewConfig = useReduxSelector(state => state.view.entity)
+    const loadStatus = useReduxSelector(state => state.application.status)
+    const viewConfig = useReduxSelector(state => state.application.entity)
 
     const viewMode = useReduxSelector(state => state.application.viewMode)
     if (!config) {

@@ -24,7 +24,55 @@ export const handlers = [
         let result: any = { data: [], count: 0 }
         dataProvider.getData(limit, offset, order, key, back, (res: any) => {
             result.data = res
-            result.count = dataProvider['_data'].length
+            result.count = dataProvider.data.length
+        })
+        return res(
+            ctx.json(result)
+        )
+    }),
+
+    rest.post(defaultEndpoint + 'get', (req, res, ctx) => {
+        const { name, keyName, key } = req.body as Record<string, any>
+        const dataProvider = getDataProvider(name)
+        let result: any = {};
+        dataProvider.get(keyName, key, (res: any) => {
+            result.data = res
+        })
+        return res(
+            ctx.json(result)
+        )
+    }),
+
+    rest.post(defaultEndpoint + 'update', (req, res, ctx) => {
+        const { name, keyName, key, modify } = req.body as Record<string, any>
+        const dataProvider = getDataProvider(name)
+        let result: any = {};
+        dataProvider.update(keyName, key, modify, (res: any) => {
+            result.data = res
+        })
+        return res(
+            ctx.json(result)
+        )
+    }),
+
+    rest.post(defaultEndpoint + 'create', (req, res, ctx) => {
+        const { name, keyName, modify } = req.body as Record<string, any>
+        const dataProvider = getDataProvider(name)
+        let result: any = {};
+        dataProvider.create(keyName, modify, (res: any) => {
+            result.data = res
+        })
+        return res(
+            ctx.json(result)
+        )
+    }),
+
+    rest.post(defaultEndpoint + 'delete', (req, res, ctx) => {
+        const { name, keyName, keys } = req.body as Record<string, any>
+        const dataProvider = getDataProvider(name)
+        let result: any = {};
+        dataProvider.delete(keyName, keys, (res: any) => {
+            result.data = res
         })
         return res(
             ctx.json(result)

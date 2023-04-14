@@ -17,17 +17,15 @@ export interface IListParams {
 
 export function List({ entity, config, data, baseUrl }: IListParams) {
     const dispatch = useReduxDispatch()
-    const loadStatus = useReduxSelector(state => state.application.status)
-    const viewConfig = useReduxSelector(state => state.application.entity)
+    const viewState = useReduxSelector(state => state.application.views[entity])
 
-    const viewMode = useReduxSelector(state => state.application.viewMode)
     if (!config) {
-        config = Object.assign({}, viewConfig) 
+        config = Object.assign({}, viewState.config) 
     }
     useEffect(() => {
         let ignore = false;
         async function loadViewConfig() {
-          if (loadStatus === 'idle') {
+          if (viewState.status === 'idle') {
             const payload = await load(entity)
             if (!ignore) {
               dispatch(payload)
@@ -39,13 +37,13 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
         return () => {
           ignore = true
         }
-      }, [loadStatus, dispatch])   
+      }, [viewState, dispatch])   
     
 
     const editorPlugin = useMemo(() => {
         const editorPlugin = new AsideEditorPlugin(
-            () => dispatch(startEditRow()),
-            () => dispatch(endEditRow())
+            () => dispatch(startEditRow(entity)),
+            () => dispatch(endEditRow(entity))
         )
         return editorPlugin;
     }, [dispatch]);
@@ -67,7 +65,7 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
         return model;
     }, [entity, config, data, baseUrl, editorPlugin]);
     let asideView = null;
-    if(viewMode === 'edit' && editorPlugin.form) {
+    if(viewState.mode === 'edit' && editorPlugin.form) {
         asideView = <Detail form={editorPlugin.form}></Detail>
     }
     return (<>

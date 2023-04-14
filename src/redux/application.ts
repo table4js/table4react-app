@@ -4,26 +4,23 @@ import { defaultEndpoint } from '../config'
 import axios from 'axios'
 
 interface IViewState {
-  entity:  any,
+  config:  any,
   status: string,
-  error: any
+  error: any,
+  mode: 'default' | 'edit',
+  editedRow: any
 }
 
 // Define a type for the slice state
-interface IApplicationState extends IViewState {
+interface IApplicationState{
   path: string,
-  viewMode: 'default' | 'edit',
-  editedRow: any
+  views: { [entity: string]: IViewState }
 }
 
 // Define the initial state using that type
 const initialState: IApplicationState = {
   path: '',
-  viewMode: 'default',
-  editedRow: undefined,
-  entity: null,
-  status: 'idle',
-  error: null
+  views: {}
 }
 
 export const applicationSlice = createSlice({
@@ -32,28 +29,38 @@ export const applicationSlice = createSlice({
   initialState,
   reducers: {
     navigateTo: (state, action: PayloadAction<string>) => {
+      const entity = action.payload.split('/')[1]
+      if(state.views[entity] === undefined) {
+        state.views[entity] = {
+          config: null,
+          status: 'idle',
+          error: null,
+          mode: 'default',
+          editedRow: undefined,
+        }
+      }
       state.path = action.payload
     },
-    startEditRow: (state, action: PayloadAction) => {
-      state.viewMode = 'edit'
+    startEditRow: (state, action: PayloadAction<string>) => {
+      state.views[action.payload].mode = 'edit'
     },
-    endEditRow: (state, action: PayloadAction) => {
-      state.editedRow = undefined
-      state.viewMode = 'default'
+    endEditRow: (state, action: PayloadAction<string>) => {
+      state.views[action.payload].editedRow = undefined
+      state.views[action.payload].mode = 'default'
     }
   },
   extraReducers(builder) {
       builder
         .addCase(load.pending, (state, action) => {
-          state.status = 'loading'
+          state.views[action.meta.arg].status = 'loading'
         })
         .addCase(load.fulfilled, (state, action) => {
-          state.status = 'succeeded'
-          state.entity = action.payload
+          state.views[action.meta.arg].status = 'succeeded'
+          state.views[action.meta.arg].config = action.payload
         })
         .addCase(load.rejected, (state, action) => {
-          state.status = 'failed'
-          state.error = action.error.message
+          state.views[action.meta.arg].status = 'failed'
+          state.views[action.meta.arg].error = action.error.message
         })
     }
 })

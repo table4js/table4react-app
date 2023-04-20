@@ -29,6 +29,12 @@ export const applicationSlice = createSlice({
   initialState,
   reducers: {
     navigateTo: (state, action: PayloadAction<string>) => {
+      const currentEntity = state.path.split('/')[1]
+      if(!!currentEntity && !!state.views[currentEntity]) {
+        // TODO: Use endEditRow, ask to save modified data and probably cancel navigation
+        state.views[currentEntity].editedRow = undefined
+        state.views[currentEntity].mode = 'default'
+      }
       const entity = action.payload.split('/')[1]
       if(state.views[entity] === undefined) {
         state.views[entity] = {

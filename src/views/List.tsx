@@ -20,7 +20,7 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
     const viewState = useReduxSelector(state => state.application.views[entity])
 
     if (!config) {
-        config = Object.assign({}, viewState.config) 
+        config = viewState.config
     }
     useEffect(() => {
         let ignore = false;
@@ -37,7 +37,7 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
         return () => {
           ignore = true
         }
-      }, [viewState, dispatch])   
+      }, [viewState, dispatch, entity])   
     
 
     const editorPlugin = useMemo(() => {
@@ -46,17 +46,18 @@ export function List({ entity, config, data, baseUrl }: IListParams) {
             () => dispatch(endEditRow(entity))
         )
         return editorPlugin;
-    }, [dispatch]);
+    }, [dispatch, entity]);
 
     const model = useMemo(() => {
         if (!config || !config.columns) return null;
-        config!.editMode = 'aside'
-        if(Array.isArray(config!.plugins)) {
-            config!.plugins.push(editorPlugin)
+        const tableConfig = Object.assign({}, config)
+        tableConfig.editMode = 'aside'
+        if(Array.isArray(tableConfig.plugins)) {
+            tableConfig.plugins.push(editorPlugin)
         } else {
-            config!.plugins = [editorPlugin]
+            tableConfig.plugins = [editorPlugin]
         }
-        const model = new Table(config!);
+        const model = new Table(tableConfig!);
         if (!!data) {
             model.dataProvider = new ArrayDataProvider(data)
         } else if (!!baseUrl) {

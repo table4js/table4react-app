@@ -2,12 +2,11 @@ import { ArrayDataProvider } from 'table4react'
 import declaration from '../assets/data/declaration.json'
 import generated from '../assets/data/generated.json'
 
-export function getDataProvider(entity: string): ArrayDataProvider {
-    if(entity === 'declaration') {
-        return new ArrayDataProvider(declaration)
-    }
-    if(entity === 'generated') {
-        return new ArrayDataProvider(generated)
-    }
-    throw new Error('Unknown entity')
+const dataProviders = {
+    'declaration': new ArrayDataProvider(declaration),
+    'generated': new ArrayDataProvider(generated),
+}
+
+export function getDataProvider(entity: keyof typeof dataProviders): ArrayDataProvider {
+    return dataProviders[entity]
 }
